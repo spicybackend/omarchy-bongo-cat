@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "jordane.bongo-cat",
+  "name": "Bongo Cat",
+  "version": "1.0.0",
+  "author": "jordane",
+  "description": "A keyboard-reactive bongo cat for the status bar",
+  "kinds": [
+    "bar-widget"
+  ],
+  "entryPoints": {
+    "barWidget": "BongoCat.qml"
+  },
+  "barWidget": {
+    "displayName": "Bongo Cat",
+    "description": "Moves each paw down while matching physical keys are held. Requires keyboard-listener to be built and readable input devices.",
+    "category": "Fun",
+    "allowMultiple": false,
+    "defaultSection": "right",
+    "defaults": {
+      "device": ""
+    },
+    "schema": [
+      {
+        "key": "device",
+        "type": "string",
+        "label": "Keyboard event device",
+        "description": "Optional /dev/input/eventN path. Leave empty to watch all keyboard devices."
+      }
+    ]
+  }
+}
