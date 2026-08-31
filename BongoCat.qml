@@ -5,7 +5,7 @@ import qs.Commons
 
 BarWidget {
     id: root
-    moduleName: "jordane.bongo-cat"
+    moduleName: "io.github.spicybackend.bongo-cat"
 
     readonly property string configuredDevice: settings && settings.device ? String(settings.device) : ""
     readonly property string listenerPath: String(Qt.resolvedUrl("keyboard-listener")).replace(/^file:\/\//, "")
