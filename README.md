@@ -28,11 +28,11 @@ The listener reads keyboard events locally only. It does not log, persist, or tr
 Clone the plugin, build its local listener, then enable it:
 
 ```bash
-omarchy plugin add https://github.com/spicybackend/omarchy-bongo-cat-shell-bar.git --yes
-cd ~/.config/omarchy/plugins/io.github.spicybackend.bongo-cat
+omarchy plugin add https://github.com/spicybackend/omarchy-bongo-cat.git --yes
+cd ~/.config/omarchy/plugins/spicybackend.bongo-cat
 make
-omarchy plugin enable io.github.spicybackend.bongo-cat
-omarchy bar move io.github.spicybackend.bongo-cat --section right
+omarchy plugin enable spicybackend.bongo-cat
+omarchy bar move spicybackend.bongo-cat --section right
 ```
 
 If `make` is unavailable:
@@ -46,13 +46,12 @@ sudo pacman -S --needed base-devel
 | Action | Result |
 | --- | --- |
 | Left-click | Cycle Bongo Cat + WPM, Bongo Cat, and WPM |
-| Hover | Show listener state, current WPM, and display mode |
 
 ## Update
 
 ```bash
-omarchy plugin update io.github.spicybackend.bongo-cat --yes
-cd ~/.config/omarchy/plugins/io.github.spicybackend.bongo-cat
+omarchy plugin update spicybackend.bongo-cat --yes
+cd ~/.config/omarchy/plugins/spicybackend.bongo-cat
 make
 omarchy restart shell
 ```
@@ -60,7 +59,7 @@ omarchy restart shell
 ## Remove
 
 ```bash
-omarchy plugin remove io.github.spicybackend.bongo-cat --yes
+omarchy plugin remove spicybackend.bongo-cat --yes
 ```
 
 ## License and attribution
