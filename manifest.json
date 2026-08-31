@@ -3,7 +3,7 @@
   "id": "io.github.spicybackend.bongo-cat",
   "name": "Bongo Cat",
   "version": "1.0.0",
-  "author": "jordane",
+  "author": "SpicyBackend",
   "license": "MIT",
   "description": "A keyboard-reactive bongo cat for the status bar",
   "kinds": [
@@ -19,7 +19,8 @@
     "allowMultiple": false,
     "defaultSection": "right",
     "defaults": {
-      "device": ""
+      "device": "",
+      "displayMode": 0
     },
     "schema": [
       {
@@ -27,6 +28,15 @@
         "type": "string",
         "label": "Keyboard event device",
         "description": "Optional /dev/input/eventN path. Leave empty to watch all keyboard devices."
+      },
+      {
+        "key": "displayMode",
+        "type": "integer",
+        "label": "Display mode",
+        "description": "0: Bongo Cat + WPM; 1: Bongo Cat; 2: WPM.",
+        "min": 0,
+        "max": 2,
+        "defaultValue": 0
       }
     ]
   }

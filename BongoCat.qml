@@ -24,7 +24,12 @@ BarWidget {
     property bool listenerOnline: false
     property bool leftKeyPressed: false
     property bool rightKeyPressed: false
-    property int displayMode: 0
+    function normalizedDisplayMode(value) {
+        const mode = Math.floor(Number(value))
+        return mode >= 0 && mode <= 2 ? mode : 0
+    }
+
+    property int displayMode: normalizedDisplayMode(setting("displayMode", 0))
     property int wordsPerMinute: 0
     property var typingTimestamps: []
     property string listenerError: ""
@@ -51,7 +56,11 @@ BarWidget {
     }
 
     function cycleDisplayMode() {
-        displayMode = (displayMode + 1) % 3
+        const next = (displayMode + 1) % 3
+        displayMode = next
+        settings = Object.assign({}, settings || {}, { displayMode: next })
+        if (bar && bar.shell && typeof bar.shell.updateEntryInline === "function")
+            bar.shell.updateEntryInline(moduleName, settings)
         if (bar) bar.showTooltip(root, statusMessage)
     }
 
