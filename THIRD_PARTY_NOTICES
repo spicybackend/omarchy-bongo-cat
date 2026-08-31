@@ -1,13 +1,9 @@
-Artwork provenance
+# Third-party material
 
-assets/cat-rest.png, assets/cat-left.png, and assets/cat-right.png are copied from the default skin in luinbytes/bongocat: https://github.com/luinbytes/bongocat/tree/main/skins/default
+The four white Bongo Cat PNG frames in `assets/` are derived from `images/cat.png`, `images/mouth.png`, `images/paw-left.png`, and `images/paw-right.png` in [Externalizable/bongo.cat](https://github.com/Externalizable/bongo.cat). Each local frame composes the source cat, mouth, and relevant raised or striking paw sprites; no bongo artwork is included.
 
-assets/cat-both.png is generated locally from pixel changes in those three copied pose frames. No other third-party artwork is shipped in this plugin.
+The `black-cat-*.png` variants are local derivatives of these source-based outline frames: the white raster strokes are rendered black for light Omarchy themes.
 
-Original meme attribution
+The source material is Copyright (c) 2018 Eric Huber and licensed under the MIT License. The complete upstream license is included in `LICENSE.externalizable-bongo-cat`.
 
-The upstream project describes its artwork as inspired by the original Bongo Cat meme: meme concept by DitzyFlama; original cat drawing by StrayRogue. This plugin is not affiliated with either creator.
-
-License reference
-
-luinbytes/bongocat declares its project license as MIT: https://github.com/luinbytes/bongocat#license
+The upstream project credits the Bongo Cat meme concept to DitzyFlama and the original cat drawing to StrayRogue.

@@ -14,9 +14,11 @@ BarWidget {
     readonly property int wpmWindowMilliseconds: 10000
     readonly property string displayModeName: displayMode === 0 ? "Bongo Cat + WPM"
         : (displayMode === 1 ? "Bongo Cat" : "WPM")
+    readonly property bool lightTheme: Color.background.r * 0.2126
+        + Color.background.g * 0.7152 + Color.background.b * 0.0722 > 0.5
     readonly property string statusMessage: listenerOnline
         ? "Bongo Cat: " + displayModeName + " · " + wordsPerMinute
-          + " WPM (rolling 10 s; click to change display)"
+          + " WPM (rolling 10 s; left-click: display)"
         : (listenerError || "Bongo Cat: keyboard listener is unavailable")
 
     property bool listenerOnline: false
@@ -51,6 +53,10 @@ BarWidget {
     function cycleDisplayMode() {
         displayMode = (displayMode + 1) % 3
         if (bar) bar.showTooltip(root, statusMessage)
+    }
+
+    function catAsset(frame) {
+        return "assets/" + (lightTheme ? "black-cat-" : "cat-") + frame + ".png"
     }
 
     function handleListenerLine(line) {
@@ -94,9 +100,9 @@ BarWidget {
                 width: parent.width
                 height: Math.max(18, root.barSize - 2)
                 source: root.leftKeyPressed && root.rightKeyPressed
-                    ? "assets/cat-both.png"
-                    : (root.leftKeyPressed ? "assets/cat-right.png"
-                       : (root.rightKeyPressed ? "assets/cat-left.png" : "assets/cat-rest.png"))
+                    ? root.catAsset("both")
+                    : (root.leftKeyPressed ? root.catAsset("right")
+                       : (root.rightKeyPressed ? root.catAsset("left") : root.catAsset("rest")))
                 fillMode: Image.PreserveAspectFit
                 opacity: root.listenerOnline ? 1 : 0.45
                 smooth: true
