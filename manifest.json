@@ -13,7 +13,7 @@
   },
   "barWidget": {
     "displayName": "Bongo Cat",
-    "description": "Moves each paw down while matching physical keys are held. Requires keyboard-listener to be built and readable input devices.",
+    "description": "Keyboard-reactive Bongo Cat with rolling WPM. Click to cycle Bongo Cat + WPM, Bongo Cat, and WPM.",
     "category": "Fun",
     "allowMultiple": false,
     "defaultSection": "right",

@@ -158,9 +158,16 @@ int main(int argc, char **argv) {
             while (read(poll_fds[index].fd, &event, sizeof(event)) == sizeof(event)) {
                 if (event.type != EV_KEY) continue;
 
+                const bool is_new_key_down = event.value == 1 && event.code <= KEY_MAX
+                    && !devices[index].key_state.pressed[event.code];
                 enum bongo_cat_event key_event = bongo_cat_key_event(
                     &devices[index].key_state, side_counts, event.code, event.value
                 );
+                if (is_new_key_down && key_counts_toward_wpm(event.code)) {
+                    puts("typed");
+                    fflush(stdout);
+                }
+
                 const char *message = event_message(key_event);
                 if (message != NULL) {
                     puts(message);

@@ -23,6 +23,13 @@ int main(void) {
     assert(!key_is_left(KEY_RIGHTALT));
     assert(!key_is_left(KEY_F7));
 
+    assert(key_counts_toward_wpm(KEY_A));
+    assert(key_counts_toward_wpm(KEY_SPACE));
+    assert(key_counts_toward_wpm(KEY_KP7));
+    assert(!key_counts_toward_wpm(KEY_LEFTCTRL));
+    assert(!key_counts_toward_wpm(KEY_LEFT));
+    assert(!key_counts_toward_wpm(KEY_BACKSPACE));
+
     assert(bongo_cat_key_event(&first_keyboard, side_counts, KEY_A, 1)
         == BONGO_CAT_EVENT_LEFT_DOWN);
     assert(bongo_cat_key_event(&first_keyboard, side_counts, KEY_S, 1)

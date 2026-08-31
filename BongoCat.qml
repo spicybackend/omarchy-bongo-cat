@@ -1,6 +1,7 @@
 import QtQuick
 import Quickshell.Io
 import qs.Ui
+import qs.Commons
 
 BarWidget {
     id: root
@@ -8,21 +9,48 @@ BarWidget {
 
     readonly property string configuredDevice: settings && settings.device ? String(settings.device) : ""
     readonly property string listenerPath: String(Qt.resolvedUrl("keyboard-listener")).replace(/^file:\/\//, "")
+    readonly property bool showWpm: displayMode !== 1
+    readonly property bool showCat: displayMode !== 2
+    readonly property int wpmWindowMilliseconds: 10000
+    readonly property string displayModeName: displayMode === 0 ? "Bongo Cat + WPM"
+        : (displayMode === 1 ? "Bongo Cat" : "WPM")
     readonly property string statusMessage: listenerOnline
-        ? "Bongo Cat: listening for key presses"
+        ? "Bongo Cat: " + displayModeName + " · " + wordsPerMinute
+          + " WPM (rolling 10 s; click to change display)"
         : (listenerError || "Bongo Cat: keyboard listener is unavailable")
 
     property bool listenerOnline: false
     property bool leftKeyPressed: false
     property bool rightKeyPressed: false
+    property int displayMode: 0
+    property int wordsPerMinute: 0
+    property var typingTimestamps: []
     property string listenerError: ""
+    readonly property real leftBarPadding: Style.spaceReal(6)
+    readonly property real rightBarPadding: Style.spaceReal(3)
 
-    implicitWidth: vertical ? barSize : 54
-    implicitHeight: barSize
+    implicitWidth: content.implicitWidth + leftBarPadding + rightBarPadding
+    implicitHeight: Math.max(content.implicitHeight, barSize)
 
     function setPaw(side, isDown) {
         if (side === "left") leftKeyPressed = isDown
         else rightKeyPressed = isDown
+    }
+
+    function refreshWpm() {
+        const cutoff = Date.now() - wpmWindowMilliseconds
+        typingTimestamps = typingTimestamps.filter(function(timestamp) { return timestamp >= cutoff })
+        wordsPerMinute = Math.round(typingTimestamps.length * 60000 / (wpmWindowMilliseconds * 5))
+    }
+
+    function recordTypingKey() {
+        typingTimestamps = typingTimestamps.concat([Date.now()])
+        refreshWpm()
+    }
+
+    function cycleDisplayMode() {
+        displayMode = (displayMode + 1) % 3
+        if (bar) bar.showTooltip(root, statusMessage)
     }
 
     function handleListenerLine(line) {
@@ -30,6 +58,8 @@ BarWidget {
         if (value === "ready") {
             listenerOnline = true
             listenerError = ""
+        } else if (value === "typed") {
+            recordTypingKey()
         } else if (value === "left down" || value === "left up"
                    || value === "right down" || value === "right up") {
             const parts = value.split(" ")
@@ -37,20 +67,49 @@ BarWidget {
         }
     }
 
-    Image {
-        id: cat
-        anchors.centerIn: parent
-        width: parent.width
-        height: parent.height
-        source: root.leftKeyPressed && root.rightKeyPressed
-            ? "assets/cat-both.png"
-            : (root.leftKeyPressed ? "assets/cat-right.png"
-               : (root.rightKeyPressed ? "assets/cat-left.png" : "assets/cat-rest.png"))
-        fillMode: Image.PreserveAspectFit
-        opacity: root.listenerOnline ? 1 : 0.45
-        smooth: true
+    Row {
+        id: content
+        anchors.left: parent.left
+        anchors.leftMargin: root.leftBarPadding
+        anchors.verticalCenter: parent.verticalCenter
+        spacing: Style.space(5)
+
+        Text {
+            visible: root.showWpm
+            height: root.barSize
+            verticalAlignment: Text.AlignVCenter
+            text: root.wordsPerMinute + " WPM"
+            color: root.bar ? root.bar.foreground : "white"
+            font.family: root.bar ? root.bar.fontFamily : "monospace"
+            font.pixelSize: Style.font.bodySmall
+        }
+
+        Item {
+            visible: root.showCat
+            width: root.vertical ? Math.max(18, root.barSize - 2) : 48
+            height: root.barSize
+
+            Image {
+                anchors.centerIn: parent
+                width: parent.width
+                height: Math.max(18, root.barSize - 2)
+                source: root.leftKeyPressed && root.rightKeyPressed
+                    ? "assets/cat-both.png"
+                    : (root.leftKeyPressed ? "assets/cat-right.png"
+                       : (root.rightKeyPressed ? "assets/cat-left.png" : "assets/cat-rest.png"))
+                fillMode: Image.PreserveAspectFit
+                opacity: root.listenerOnline ? 1 : 0.45
+                smooth: true
+            }
+        }
     }
 
+    Timer {
+        interval: 1000
+        running: true
+        repeat: true
+        onTriggered: root.refreshWpm()
+    }
 
     Timer {
         id: retryTimer
@@ -83,6 +142,7 @@ BarWidget {
     MouseArea {
         anchors.fill: parent
         hoverEnabled: true
+        onClicked: root.cycleDisplayMode()
         onEntered: if (root.bar) root.bar.showTooltip(root, root.statusMessage)
         onExited: if (root.bar) root.bar.hideTooltip(root)
     }
