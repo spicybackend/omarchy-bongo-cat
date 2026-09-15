@@ -2,6 +2,8 @@
 
 A keyboard-reactive Bongo Cat and rolling WPM meter for the Omarchy Quickshell bar.
 
+![Built for Omarchy: Plugin](https://raw.githubusercontent.com/tcballard/omarchy-badges/refs/heads/main/badges/v1/omarchy-plugin.svg) ![Supported Omarchy versions: 4.0.0+](https://raw.githubusercontent.com/tcballard/omarchy-badges/refs/heads/main/badges/v1/compatibility/omarchy-4.0.0-plus.svg)
+
 ## Features
 
 - Tracks physical keyboard press and release events.
@@ -15,10 +17,16 @@ A keyboard-reactive Bongo Cat and rolling WPM meter for the Omarchy Quickshell b
 
 - Omarchy Quattro with Quickshell.
 - A C compiler and `make` (`base-devel` on Arch) to build the local keyboard listener.
-- Permission to read keyboard event devices. Add your user to the `input` group, then sign out and back in:
+- Permission to read keyboard event devices. Grant it once:
 
   ```bash
   sudo usermod -aG input "$USER"
+  ```
+
+  Bongo Cat starts its listener with the new `input` group immediately; signing out is not needed. If Bongo Cat is already enabled, reload its listener:
+
+  ```bash
+  omarchy restart shell
   ```
 
 The listener reads keyboard events locally only. It does not log, persist, or transmit keystrokes.
@@ -40,12 +48,6 @@ If `make` is unavailable:
 ```bash
 sudo pacman -S --needed base-devel
 ```
-
-## Controls
-
-| Action | Result |
-| --- | --- |
-| Left-click | Cycle Bongo Cat + WPM, Bongo Cat, and WPM |
 
 ## Update
 

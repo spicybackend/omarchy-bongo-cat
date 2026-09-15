@@ -9,6 +9,8 @@ BarWidget {
 
     readonly property string configuredDevice: settings && settings.device ? String(settings.device) : ""
     readonly property string listenerPath: String(Qt.resolvedUrl("keyboard-listener")).replace(/^file:\/\//, "")
+    readonly property string listenerCommand: root.shellQuote(root.listenerPath)
+        + (root.configuredDevice === "" ? "" : " " + root.shellQuote(root.configuredDevice))
     readonly property bool showWpm: displayMode !== 1
     readonly property bool showCat: displayMode !== 2
     readonly property int wpmWindowMilliseconds: 10000
@@ -42,6 +44,10 @@ BarWidget {
     function setPaw(side, isDown) {
         if (side === "left") leftKeyPressed = isDown
         else rightKeyPressed = isDown
+    }
+
+    function shellQuote(argument) {
+        return "'" + String(argument).replace(/'/g, "'\\''") + "'"
     }
 
     function refreshWpm() {
@@ -134,9 +140,9 @@ BarWidget {
 
     Process {
         id: listener
-        command: root.configuredDevice === ""
-            ? [root.listenerPath]
-            : [root.listenerPath, root.configuredDevice]
+        // newgrp obtains the newly granted input-group credential without
+        // expanding the long-lived Omarchy shell's privilege set.
+        command: ["newgrp", "input", "-c", root.listenerCommand]
         stdout: SplitParser {
             onRead: function(line) { root.handleListenerLine(line) }
         }
