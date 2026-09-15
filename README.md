@@ -1,5 +1,7 @@
 # Bongo Cat for Omarchy
 
+![Bongo Cat reacting to keyboard input](docs/images/bongo-cat.gif)
+
 A keyboard-reactive Bongo Cat and rolling WPM meter for the Omarchy Quickshell bar.
 
 ![Built for Omarchy: Plugin](https://raw.githubusercontent.com/tcballard/omarchy-badges/refs/heads/main/badges/v1/omarchy-plugin.svg) ![Supported Omarchy versions: 4.0.0+](https://raw.githubusercontent.com/tcballard/omarchy-badges/refs/heads/main/badges/v1/compatibility/omarchy-4.0.0-plus.svg)
